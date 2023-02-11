@@ -14,24 +14,16 @@ export const up = async () => {
 
     console.log('createCostumersTable migrated!');
   }
-  catch {
-    console.log('error migrating createCostumersTable...');
-    console.log(error);
-
-    return true;
+  catch (error) {
+    return error;
   }
 }
 
 export const down = async () => {
   try {
     await pool.query('DROP TABLE costumers;');
-
-    console.log('createCostumersTable rolled back!');
   }
   catch (error) {
-    console.log('error rolling back createCostumersTable...');
-    console.log(error);
-
-    return true;
+    return error;
   }
 }

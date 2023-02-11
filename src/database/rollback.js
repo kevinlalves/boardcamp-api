@@ -6,19 +6,18 @@ const rollback = async () => {
 
   try {
     const { down } = await import(`../migrations/${migratedList[migratedList.length-1]}.js`);
-
     const error  = await down();
-    console.log(error);
     if (error) {
-      return;
+      throw error;
     }
 
     const writeStream = fs.createWriteStream('./src/database/migratedList.txt', { flags: 'w' });
     migratedList.pop();
-    writeStream.write(migratedList.join('\n'));
+    writeStream.write(migratedList.join('\n')+'\n');
+    console.log('rolled back successfully!');
   }
   catch (error) {
-    console.log(`Error running rollback ${migratedList[migratedList.length-1]}`);
+    console.log(`error running rollback ${migratedList[migratedList.length-1]}`);
     console.log(error);
   }
 };

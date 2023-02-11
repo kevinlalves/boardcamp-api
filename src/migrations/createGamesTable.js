@@ -10,27 +10,17 @@ export const up = async () => {
         price_per_day int8 NOT NULL
       );
     `);
-
-    console.log('createGamesTable migrated!');
   }
   catch (error) {
-    console.log('error migrating createGamesTable...');
-    console.log(error);
-
-    return true;
+    return error;
   }
 };
 
 export const down = async () => {
   try {
     await pool.query('DROP TABLE games;');
-
-    console.log('createGamesTable rolled back!');
   }
   catch (error) {
-    console.log('error rolling back createGamesTable...');
-    console.log(error);
-
-    return true;
+    return error;
   }
 };

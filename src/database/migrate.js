@@ -16,12 +16,14 @@ const migrate = async () => {
       const { up } = await import(`../migrations/${migrationsList[migrationIndex]}.js`);
       const error = await up();
       if (error) {
-        return;
+        throw error;
       }
 
       writeStream.write(migrationsList[migrationIndex]+'\n');
-    } catch (error) {
-      console.log(`Error running migration ${migrationsList[migrationIndex]}`);
+      console.log('migrated successfully!');
+    }
+    catch (error) {
+      console.log(`error running migration ${migrationsList[migrationIndex]}`);
       console.log(error);
       break;
     }

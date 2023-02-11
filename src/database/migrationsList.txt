@@ -1,3 +1,4 @@
 createCostumersTable
 createGamesTable
-createRentsTable
+createRentalsTable
+addImageToGames
