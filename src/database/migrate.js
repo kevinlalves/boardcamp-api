@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-async function runMigrations() {
+async function migrate() {
   let data = await fs.promises.readFile('./src/database/migrationsList.txt', 'utf-8');
   const migrationsList = data.trim().split('\n');
 
@@ -13,10 +13,15 @@ async function runMigrations() {
   let migrationIndex = migrationsList.length-1;
   while (migrationIndex >= 0 && migrationsList[migrationIndex] !== lastMigration) {
     try {
-      await import(`../migrations/${migrationsList[migrationIndex]}.js`);
+      const { up } = await import(`../migrations/${migrationsList[migrationIndex]}.js`);
+      const error = await up();
+      if (error) {
+        return;
+      }
+
       writeStream.write(migrationsList[migrationIndex]+'\n');
     } catch (error) {
-      console.log(`Error running migration ${migrations[migrations.lenght-1]}`);
+      console.log(`Error running migration ${migrationsList[migrationIndex]}`);
       console.log(error);
       break;
     }
@@ -24,5 +29,4 @@ async function runMigrations() {
   }
 };
 
-
-export default runMigrations;
+migrate();
