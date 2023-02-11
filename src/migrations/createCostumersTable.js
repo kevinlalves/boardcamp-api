@@ -4,11 +4,11 @@ export const up = async () => {
   try {
     await pool.query(`
       CREATE TABLE costumers (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        phone TEXT NOT NULL,
-        cpf VARCHAR(11) NOT NULL UNIQUE,
-        birthday DATE NOT NULL
+        id serial PRIMARY KEY,
+        name text NOT NULL,
+        phone text NOT NULL,
+        cpf varchar(11) NOT NULL UNIQUE,
+        birthday date NOT NULL
       );
     `);
 
@@ -17,6 +17,7 @@ export const up = async () => {
   catch {
     console.log('error migrating createCostumersTable...');
     console.log(error);
+
     return true;
   }
 }
@@ -30,6 +31,7 @@ export const down = async () => {
   catch (error) {
     console.log('error rolling back createCostumersTable...');
     console.log(error);
+
     return true;
   }
 }

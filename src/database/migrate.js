@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-async function migrate() {
+const migrate = async () => {
   let data = await fs.promises.readFile('./src/database/migrationsList.txt', 'utf-8');
   const migrationsList = data.trim().split('\n');
 

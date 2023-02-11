@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { indexCostumers } from '../controllers/costumers.controller.js';
+import { addCostumer, listCostumers } from '../controllers/costumers.controller.js';
 import processRequestParams from '../middlewares/processRequestParams.js';
-import { indexCostumersSchema } from '../schemas/costumer.requests.js';
+import { addCostumerSchema, listCostumersSchema } from '../schemas/costumer.requests.js';
 
 const router = new Router('/costumers');
 
-router.get('/', processRequestParams(indexCostumersSchema), indexCostumers);
+router.get('/', processRequestParams(listCostumersSchema), listCostumers);
+router.post('/', processRequestParams(addCostumerSchema), addCostumer);
 
 export { router as costumersRouter };
