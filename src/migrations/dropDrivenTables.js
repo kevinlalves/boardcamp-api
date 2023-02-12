@@ -3,7 +3,7 @@ import db from '../database/database.connection.js';
 export const up = async () => {
   try {
     const query = `
-      DROP TABLE IF EXISTS customers, rentals, games;
+      DROP TABLE customers, rentals, games;
     `;
 
     await db.query(query);
