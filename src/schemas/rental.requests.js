@@ -17,7 +17,7 @@ export const listRentalsSchema = Joi.object({
     'originalPrice'
   ),
   desc: Joi.bool(),
-  status: Joi.string().valid('open', 'close'),
+  status: Joi.string().valid('open', 'closed'),
   startDate: Joi.string().regex(dateFormat)
 });
 

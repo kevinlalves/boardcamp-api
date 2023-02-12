@@ -66,17 +66,17 @@ export const closeRental = async (req, res) => {
   console.log(chalk.cyan(`POST /rentals/${id}/return`));
 
   try {
-    const { rowCount } = await db.query(closeQuery(), [id]);
-    if(rowCount === 0) {
-      return res.status(404).send('não existe alguel com o id fornecido');
-    }
-
     // driven garbage
     const { rows } = await db.query('select id from rentals where id = $1 and "returnDate" is not null', [id]);
     if (rows.length > 0) {
       return res.status(400).send('jogo já foi entregue');
     }
     //
+
+    const { rowCount } = await db.query(closeQuery(), [id]);
+    if (rowCount === 0) {
+      return res.status(404).send('não existe alguel com o id fornecido');
+    }
 
     res.send();
   }
