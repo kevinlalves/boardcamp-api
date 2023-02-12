@@ -5,3 +5,6 @@ addImageToGames
 addDefaultToRentDateFromRentals
 renameCostumersToCustomersTable
 renameCostumerIdToCustomerIdColumn
+addTriggerUpdateReturnDateFromRentals
+addIdToRentals
+addTriggerPreventDeleteOpenToRentals

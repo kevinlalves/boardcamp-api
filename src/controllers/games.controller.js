@@ -7,7 +7,6 @@ import { addQuery, listQuery } from '../queries/games.queries.js';
 
 export const listGames = async (req, res) => {
   const { name = '', offset = 0, limit = standardBatch, order = 'id', desc = false } = req.Params;
-
   console.log(chalk.cyan('GET /games'));
 
   try {
@@ -22,7 +21,6 @@ export const listGames = async (req, res) => {
 
 export const addGame = async (req, res) => {
   const { name, image, stockTotal, pricePerDay } = req.Params;
-
   console.log(chalk.cyan('POST /games'));
 
   try {

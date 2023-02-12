@@ -6,8 +6,8 @@ import { standardBatch } from '../utils/constants/queries.js';
 import internalError from '../utils/functions/internalError.js';
 
 export const listCustomers = async (req, res) => {
-  console.log(chalk.cyan('GET /customers'));
   const { cpf = '', offset = 0, limit = standardBatch, order = 'id', desc = false } = req.Params;
+  console.log(chalk.cyan('GET /customers'));
 
   try {
     const { rows: customers } = await db.query(listQuery({ order, desc }), [cpf + '%', offset, limit]);
@@ -20,8 +20,8 @@ export const listCustomers = async (req, res) => {
 };
 
 export const showCustomer = async (req, res) => {
-  console.log(chalk.cyan(`POST /customers/${id}`));
   const { id } = req.Params;
+  console.log(chalk.cyan(`POST /customers/${id}`));
 
   try {
     const { rows: customers } = await db.query(showQuery(), [id]);
@@ -38,8 +38,8 @@ export const showCustomer = async (req, res) => {
 };
 
 export const addCustomer = async (req, res) => {
-  console.log(chalk.cyan('POST /customers'));
   const { cpf, phone, name, birthday } = req.Params;
+  console.log(chalk.cyan('POST /customers'));
 
   try {
     await db.query(addQuery(), [name, phone, cpf, birthday]);
@@ -58,8 +58,8 @@ export const addCustomer = async (req, res) => {
 
 
 export const updateCustomer = async (req, res) => {
-  console.log(chalk.cyan(`PUT /customers/${id}`));
   const { id, cpf, phone, name, birthday } = req.Params;
+  console.log(chalk.cyan(`PUT /customers/${id}`));
 
   const setClause = [
     cpf && `cpf='${cpf}'`,
@@ -74,8 +74,7 @@ export const updateCustomer = async (req, res) => {
 
   try {
     const { rowCount } = await db.query(updateQuery(setClause), [id]);
-
-    if(!rowCount) {
+    if(rowCount === 0) {
       return res.status(404).send('cliente não encontrado');
     }
 

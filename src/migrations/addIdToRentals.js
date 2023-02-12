@@ -4,8 +4,7 @@ export const up = async () => {
   try {
     const query = `
       ALTER TABLE rentals
-      ALTER COLUMN rent_date
-      SET DEFAULT NOW();
+      ADD COLUMN id serial UNIQUE;
     `;
 
     await db.query(query);
@@ -19,8 +18,7 @@ export const down = async () => {
   try {
     const query = `
       ALTER TABLE rentals
-      ALTER COLUMN rent_date
-      DROP DEFAULT;
+      DROP COLUMN id;
     `;
 
     await db.query(query);

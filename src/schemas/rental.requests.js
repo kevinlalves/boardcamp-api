@@ -7,6 +7,7 @@ export const listRentalsSchema = Joi.object({
   offset: Joi.number().integer().min(0),
   limit: Joi.number().integer().min(1),
   order: Joi.string().valid(
+    'id',
     'customerId',
     'gameId',
     'daysRented',

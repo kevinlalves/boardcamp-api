@@ -1,22 +1,22 @@
 import chalk from 'chalk';
 import db from '../database/database.connection.js';
-import { foreingKeyConstraint } from '../utils/constants/postgres.js';
+import { customConstraint, foreingKeyConstraint } from '../utils/constants/postgres.js';
 import { standardBatch } from '../utils/constants/queries.js';
 import internalError from '../utils/functions/internalError.js';
-import { createReadQuery, createWriteQuery, listQuery } from '../queries/rentals.queries.js';
+import { closeQuery, createReadQuery, createWriteQuery, deleteQuery, listQuery } from '../queries/rentals.queries.js';
 
 export const listRentals = async (req, res) => {
-  console.log(chalk.cyan('GET /rentals'));
   const {
     customerId,
     gameId,
     offset = 0,
     limit = standardBatch,
-    order = 'rentDate',
+    order = 'id',
     desc,
     status,
     startDate
   } = req.Params;
+  console.log(chalk.cyan('GET /rentals'));
 
   try {
     const { rows: rentals } = await db.query(
@@ -32,8 +32,8 @@ export const listRentals = async (req, res) => {
 };
 
 export const createRental = async (req, res) => {
-  console.log(chalk.cyan('POST /rentals'));
   const { customerId, gameId, daysRented } = req.Params;
+  console.log(chalk.cyan('POST /rentals'));
 
   try {
     const { rows } = await db.query(createReadQuery(), [gameId]);
@@ -54,6 +54,49 @@ export const createRental = async (req, res) => {
   catch (error) {
     if (error.code === foreingKeyConstraint) {
       return res.status(400).send('não foram encontrados clientes com o id recebido');
+    }
+
+    internalError(error, res);
+  }
+};
+
+
+export const closeRental = async (req, res) => {
+  const { id } = req.Params;
+  console.log(chalk.cyan(`POST /rentals/${id}/return`));
+
+  try {
+    const { rowCount } = await db.query(closeQuery(), [id]);
+    if(rowCount === 0) {
+      return res.status(404).send('não existe alguel com o id fornecido');
+    }
+
+    res.send();
+  }
+  catch (error) {
+    if (error.code === customConstraint) {
+      return res.status(400).send('jogo já foi entregue');
+    }
+
+    internalError(error, res);
+  }
+};
+
+export const deleteRental = async (req, res) => {
+  const { id } = req.Params;
+  console.log(chalk.cyan(`DELETE /rentals/${id}`));
+
+  try {
+    const { rowCount } = await db.query(deleteQuery(), [id]);
+    if (rowCount === 0) {
+      return res.status(404).send('não existe alguel com o id fornecido');
+    }
+
+    res.send();
+  }
+  catch (error) {
+    if (error.code === customConstraint) {
+      return res.status(400).send('não é permitida a deleção de algueis ainda em aberto');
     }
 
     internalError(error, res);

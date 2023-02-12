@@ -2,6 +2,7 @@ import camelToSnakeCase from '../utils/functions/camelToSnakeCase.js';
 
 export const listQuery = ({ customerId, gameId, status, startDate, order, desc }) => (`
   SELECT
+    rentals.id,
     rentals.customer_id AS "customerId",
     rentals.game_id AS "gameId",
     rentals.rent_date AS "rentDate",
@@ -44,4 +45,19 @@ export const createReadQuery = () => (`
 export const createWriteQuery = () => (`
   INSERT INTO rentals (customer_id, game_id, days_rented, original_price) VALUES
   ($1, $2, $3, $4);
+`);
+
+export const closeQuery = () => (`
+  UPDATE rentals
+  SET
+    return_date = NOW(),
+    delay_fee = GREATEST(0, (EXTRACT(day FROM NOW()-rentals.rent_date)::int2 - rentals.days_rented) * games.price_per_day)
+  FROM games
+  WHERE rentals.id = $1
+  AND games.id = rentals.game_id;
+`);
+
+export const deleteQuery = () => (`
+  DELETE FROM rentals
+  WHERE id = $1;
 `);
