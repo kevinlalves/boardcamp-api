@@ -17,7 +17,7 @@ export const up = async () => {
   catch (error) {
     return error;
   }
-}
+};
 
 export const down = async () => {
   try {
@@ -26,4 +26,4 @@ export const down = async () => {
   catch (error) {
     return error;
   }
-}
+};
