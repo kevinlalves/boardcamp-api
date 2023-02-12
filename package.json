@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production node src/app.js",
-    "dev": "NODE_ENV=development nodemon src/app.js",
-    "migrate": "NODE_ENV=development node src/database/migrate.js",
-    "rollback": "NODE_ENV=development node src/database/rollback.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "migrate": "node src/database/migrate.js",
+    "rollback": "node src/database/rollback.js"
   },
   "dependencies": {
     "chalk": "^5.2.0",

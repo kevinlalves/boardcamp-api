@@ -6,9 +6,7 @@ import dotenv from 'dotenv';
 import { customersRouter } from './routes/customers.js';
 import { gamesRouter } from './routes/games.js';
 import { rentalsRouter } from './routes/rentals.js';
-dotenv.config({
-  path: `envs/${process.env.NODE_ENV}.env`
-});
+dotenv.config();
 
 const app = express();
 const { PORT } = process.env;
