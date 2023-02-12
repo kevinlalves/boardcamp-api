@@ -1,23 +1,16 @@
 import chalk from 'chalk';
 import db from '../database/database.connection.js';
+import { addQuery, listQuery, showQuery, updateQuery } from '../queries/customers.queries.js';
 import { valueAlreadyExistsError } from '../utils/constants/postgres.js';
 import { standardBatch } from '../utils/constants/queries.js';
 import internalError from '../utils/functions/internalError.js';
 
 export const listCustomers = async (req, res) => {
+  console.log(chalk.cyan('GET /customers'));
   const { cpf = '', offset = 0, limit = standardBatch, order = 'id', desc = false } = req.Params;
 
-  console.log(chalk.cyan('GET /customers'));
-
   try {
-    const query = `
-      SELECT * FROM customers
-      WHERE cpf LIKE $1
-      ORDER BY ${order} ${desc === 'true' ? 'DESC' : 'ASC'}
-      OFFSET $2
-      LIMIT $3;
-    `;
-    const { rows: customers } = await db.query(query, [cpf + '%', offset, limit]);
+    const { rows: customers } = await db.query(listQuery({ order, desc }), [cpf + '%', offset, limit]);
 
     res.json(customers);
   }
@@ -27,16 +20,11 @@ export const listCustomers = async (req, res) => {
 };
 
 export const showCustomer = async (req, res) => {
+  console.log(chalk.cyan(`POST /customers/${id}`));
   const { id } = req.Params;
 
-  console.log(chalk.cyan(`POST /customers/${id}`));
-
   try {
-    const query = `
-      SELECT * FROM customers
-      WHERE id = $1;
-    `;
-    const { rows: customers } = await db.query(query, [id]);
+    const { rows: customers } = await db.query(showQuery(), [id]);
 
     if (!customers.length) {
       return res.status(404).send('cliente não encontrado');
@@ -50,16 +38,11 @@ export const showCustomer = async (req, res) => {
 };
 
 export const addCustomer = async (req, res) => {
+  console.log(chalk.cyan('POST /customers'));
   const { cpf, phone, name, birthday } = req.Params;
 
-  console.log(chalk.cyan('POST /customers'));
-
   try {
-    const query = `
-      INSERT INTO customers (name, phone, cpf, birthday) VALUES
-      ($1, $2, $3, $4);
-    `;
-    await db.query(query, [name, phone, cpf, birthday]);
+    await db.query(addQuery(), [name, phone, cpf, birthday]);
 
     res.status(201).send();
   }
@@ -75,9 +58,8 @@ export const addCustomer = async (req, res) => {
 
 
 export const updateCustomer = async (req, res) => {
-  const { id, cpf, phone, name, birthday } = req.Params;
-
   console.log(chalk.cyan(`PUT /customers/${id}`));
+  const { id, cpf, phone, name, birthday } = req.Params;
 
   const setClause = [
     cpf && `cpf='${cpf}'`,
@@ -91,12 +73,7 @@ export const updateCustomer = async (req, res) => {
   }
 
   try {
-    const query = `
-      UPDATE customers
-      SET ${setClause}
-      WHERE id=$1;
-    `;
-    const { rowCount } = await db.query(query, [id]);
+    const { rowCount } = await db.query(updateQuery(setClause), [id]);
 
     if(!rowCount) {
       return res.status(404).send('cliente não encontrado');

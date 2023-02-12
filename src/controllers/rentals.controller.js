@@ -1,29 +1,42 @@
 import chalk from 'chalk';
 import db from '../database/database.connection.js';
 import { foreingKeyConstraint } from '../utils/constants/postgres.js';
+import { standardBatch } from '../utils/constants/queries.js';
 import internalError from '../utils/functions/internalError.js';
+import { createReadQuery, createWriteQuery, listQuery } from '../queries/rentals.queries.js';
 
 export const listRentals = async (req, res) => {
+  console.log(chalk.cyan('GET /rentals'));
+  const {
+    customerId,
+    gameId,
+    offset = 0,
+    limit = standardBatch,
+    order = 'rentDate',
+    desc,
+    status,
+    startDate
+  } = req.Params;
 
+  try {
+    const { rows: rentals } = await db.query(
+      listQuery({ customerId, gameId, order, desc, status, startDate }),
+      [offset, limit]
+    );
+
+    res.json(rentals);
+  }
+  catch (error) {
+    internalError(error, res);
+  }
 };
 
 export const createRental = async (req, res) => {
+  console.log(chalk.cyan('POST /rentals'));
   const { customerId, gameId, daysRented } = req.Params;
 
-  console.log(chalk.cyan('POST /rentals'));
-
   try {
-    const selectQuery = `
-      SELECT
-        games.stock_total AS "totalNumOfGames",
-        games.price_per_day AS "gamePricePerDay",
-        COUNT(rentals.game_id) AS "numGamesRented"
-      FROM games
-      LEFT JOIN rentals ON rentals.game_id = games.id
-      WHERE games.id = $1
-      GROUP BY games.id;
-    `;
-    const { rows } = await db.query(selectQuery, [gameId]);
+    const { rows } = await db.query(createReadQuery(), [gameId]);
 
     if (!rows.length) {
       return res.status(400).send('não foram encontrados jogos com o id recebido');
@@ -34,11 +47,7 @@ export const createRental = async (req, res) => {
       return res.status(400).send('jogo está sem estoque');
     }
 
-    const insertQuery = `
-      INSERT INTO rentals (customer_id, game_id, days_rented, original_price) VALUES
-      ($1, $2, $3, $4);
-    `;
-    await db.query(insertQuery, [customerId, gameId, daysRented, daysRented*gamePricePerDay]);
+    await db.query(createWriteQuery(), [customerId, gameId, daysRented, daysRented * gamePricePerDay]);
 
     res.status(201).send();
   }
