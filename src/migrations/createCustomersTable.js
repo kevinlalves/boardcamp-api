@@ -3,9 +3,13 @@ import db from '../database/database.connection.js';
 export const up = async () => {
   try {
     const query = `
-      ALTER TABLE rentals
-      ALTER COLUMN rent_date
-      SET DEFAULT NOW();
+      CREATE TABLE customers (
+        id serial PRIMARY KEY,
+        name text NOT NULL,
+        phone text NOT NULL,
+        cpf varchar(11) NOT NULL UNIQUE,
+        birthday date NOT NULL
+      );
     `;
 
     await db.query(query);
@@ -17,13 +21,7 @@ export const up = async () => {
 
 export const down = async () => {
   try {
-    const query = `
-      ALTER TABLE rentals
-      ALTER COLUMN rent_date
-      DROP DEFAULT;
-    `;
-
-    await db.query(query);
+    await db.query('DROP TABLE customers;');
   }
   catch (error) {
     return error;

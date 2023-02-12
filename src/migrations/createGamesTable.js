@@ -6,6 +6,7 @@ export const up = async () => {
       CREATE TABLE games (
         id serial PRIMARY KEY,
         name text NOT NULL UNIQUE,
+        image text NOT NULL,
         stock_total int4 NOT NULL DEFAULT 0,
         price_per_day int8 NOT NULL
       );

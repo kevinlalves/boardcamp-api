@@ -1,0 +1,6 @@
+dropDrivenTables
+createCustomersTable
+createGamesTable
+createRentalsTable
+addTriggerUpdateReturnDateFromRentals
+addTriggerPreventDeleteOpenToRentals
