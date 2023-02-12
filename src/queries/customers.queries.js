@@ -1,7 +1,7 @@
 export const listQuery = ({ order, desc }) => (`
   SELECT * FROM customers
   WHERE cpf LIKE $1
-  ORDER BY ${order} ${desc === 'true' ? 'DESC' : 'ASC'}
+  ORDER BY "${order}" ${desc === 'true' ? 'DESC' : ''}
   OFFSET $2
   LIMIT $3;
 `);

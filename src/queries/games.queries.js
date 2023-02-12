@@ -2,7 +2,7 @@ export const listQuery = ({ order, desc }) => (`
   SELECT *
   FROM games
   WHERE name ILIKE $1
-  ORDER BY ${order} ${desc ? 'DESC' : 'ASC'}
+  ORDER BY "${order}" ${desc ? 'DESC' : ''}
   OFFSET $2
   LIMIT $3;
 `);
