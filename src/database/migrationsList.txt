@@ -1,3 +1,4 @@
+dropDrivenTables
 createCustomersTable
 createGamesTable
 createRentalsTable

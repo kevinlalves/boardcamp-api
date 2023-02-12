@@ -19,6 +19,8 @@ app.use('/customers', customersRouter);
 app.use('/games', gamesRouter);
 app.use('/rentals', rentalsRouter);
 
+migrate();
+
 app.listen(PORT, () => {
   console.log(chalk.green(`Server listening on port ${PORT}`));
 });
