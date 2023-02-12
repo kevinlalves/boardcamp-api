@@ -1,4 +1,7 @@
-createCostumersTable
+createCustomersTable
 createGamesTable
 createRentalsTable
 addImageToGames
+addDefaultToRentDateFromRentals
+renameCostumersToCustomersTable
+renameCostumerIdToCustomerIdColumn

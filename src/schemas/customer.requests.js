@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { dateFormat, onlyDigits } from '../utils/constants/regex.js';
 
-export const listCostumersSchema = Joi.object({
+export const listCustomersSchema = Joi.object({
   cpf: Joi.string().regex(onlyDigits).max(11),
   offset: Joi.number().integer().min(0),
   limit: Joi.number().integer().min(1),
@@ -9,14 +9,14 @@ export const listCostumersSchema = Joi.object({
   desc: Joi.boolean()
 });
 
-export const addCostumerSchema = Joi.object({
+export const addCustomerSchema = Joi.object({
   name: Joi.string().required(),
   phone: Joi.string().regex(onlyDigits).min(10).max(11).required(),
   cpf: Joi.string().regex(onlyDigits).min(11).max(11).required(),
   birthday: Joi.date().required()
 });
 
-export const updateCostumerSchema = Joi.object({
+export const updateCustomerSchema = Joi.object({
   id: Joi.number().integer().min(1).required(),
   name: Joi.string(),
   phone: Joi.string().regex(onlyDigits).min(10).max(11),

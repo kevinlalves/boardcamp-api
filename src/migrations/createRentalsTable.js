@@ -1,19 +1,21 @@
-import pool from '../database/database.connection.js';
+import db from '../database/database.connection.js';
 
 export const up = async () => {
   try {
-    await pool.query(`
+    const query = `
       CREATE TABLE rentals (
-        costumer_id int4 REFERENCES costumers,
+        customer_id int4 REFERENCES customers,
         game_id int4 REFERENCES games,
         rent_date date NOT NULL,
         days_rented int2 NOT NULL,
         return_date date,
         original_price int4 NOT NULL,
         delay_fee int4,
-        PRIMARY KEY (costumer_id, game_id)
+        PRIMARY KEY (customer_id, game_id)
       );
-    `);
+    `;
+
+    await db.query(query);
   }
   catch (error) {
     return error;
@@ -22,7 +24,7 @@ export const up = async () => {
 
 export const down = async () => {
   try {
-    await pool.query('DROP TABLE rents;');
+    await db.query('DROP TABLE rents;');
   }
   catch (error) {
     return error;

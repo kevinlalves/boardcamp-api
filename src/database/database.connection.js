@@ -6,9 +6,9 @@ dotenv.config({
 
 const { Pool } = pg;
 
-const pool = new Pool({
+const db = new Pool({
   connectionString: process.env.DATABASE_URI,
   ssl: process.env.NODE_ENV === 'production'
 });
 
-export default pool;
+export default db;
