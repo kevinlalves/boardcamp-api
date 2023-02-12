@@ -49,7 +49,7 @@ export const closeQuery = () => (`
   UPDATE rentals
   SET
     "returnDate" = NOW(),
-    "delayFee" = GREATEST(0, (EXTRACT(day FROM NOW()-rentals."rentDate")::int4 - "rentals.daysRented") * games."pricePerDay")
+    "delayFee" = GREATEST(0, (EXTRACT(day FROM NOW()-rentals."rentDate")::int4 - rentals."daysRented") * games."pricePerDay")
   FROM games
   WHERE rentals.id = $1
   AND games.id = rentals."gameId";
