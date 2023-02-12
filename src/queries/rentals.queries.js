@@ -23,7 +23,7 @@ export const listQuery = ({ customerId, gameId, status, startDate, order, desc }
   ${customerId ? `AND rentals."customerId"=${customerId}` : ''}
   ${gameId ? `AND rentals."gameId"=${gameId}` : ''}
   ${status ? `AND rentals."returnDate" IS ${status === 'closed' ? 'NOT' : ''} NULL` : ''}
-  ${startDate ? `AND rentals."rentDate" >= ${startDate}::date` : ''}
+  ${startDate ? `AND rentals."rentDate" >= TO_DATE('${startDate}', 'YYYY-MM-DD')` : ''}
   ORDER BY ${order} ${desc === 'true' ? 'DESC' : ''}
   OFFSET $1
   LIMIT $2;
