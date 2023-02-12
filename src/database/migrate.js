@@ -8,8 +8,6 @@ const migrate = async () => {
   const migratedList = data.trim().split('\n');
   const lastMigration = migratedList[migratedList.length-1];
 
-  const writeStream = fs.createWriteStream('./src/database/migratedList.txt', { flags: 'a' });
-
   let migrationIndex = migrationsList.length-1;
   while (migrationIndex >= 0 && migrationsList[migrationIndex] !== lastMigration) {
     try {
@@ -19,7 +17,6 @@ const migrate = async () => {
         throw error;
       }
 
-      writeStream.write(migrationsList[migrationIndex]+'\n');
       console.log('migrated successfully!');
     }
     catch (error) {
