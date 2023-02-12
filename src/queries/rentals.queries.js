@@ -41,8 +41,8 @@ export const createReadQuery = () => (`
 `);
 
 export const createWriteQuery = () => (`
-  INSERT INTO rentals ("customerId", "gameId", "daysRented", "originalPrice") VALUES
-  ($1, $2, $3, $4);
+  INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "originalPrice") VALUES
+  ($1, $2, NOW(), $3, $4);
 `);
 
 export const closeQuery = () => (`

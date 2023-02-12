@@ -79,6 +79,12 @@ export const updateCustomer = async (req, res) => {
   }
 
   try {
+    // driven garbage
+    const { rows } = await db.query('select name from customers where cpf = $1 and id <> $2', [cpf, id]);
+    if (rows.length > 0) {
+      return res.status(409).send('novo cpf já existe no sistema');
+    }
+    //
     const { rowCount } = await db.query(updateQuery(setClause), [id]);
     if(rowCount === 0) {
       return res.status(404).send('cliente não encontrado');
