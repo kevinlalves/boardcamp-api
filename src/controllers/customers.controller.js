@@ -42,6 +42,12 @@ export const addCustomer = async (req, res) => {
   console.log(chalk.cyan('POST /customers'));
 
   try {
+    // driven garbage code
+    const { rows: customers } = await db.query('select cpf from customers where cpf = $1', [cpf]);
+    if (customers > 0) {
+      return res.status(409).send('cpf já cadastrado');
+    }
+    //
     await db.query(addQuery(), [name, phone, cpf, birthday]);
 
     res.status(201).send();

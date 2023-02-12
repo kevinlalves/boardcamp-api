@@ -24,6 +24,12 @@ export const addGame = async (req, res) => {
   console.log(chalk.cyan('POST /games'));
 
   try {
+    // driven gargabe code
+    const { rows: games } = await db.query('select name from games where name = $1', [name]);
+    if (games.length > 0) {
+      return res.status(409).send('já existe um jogo com o mesmo nome');
+    }
+    //
     await db.query(addQuery(), [name, image, stockTotal, pricePerDay]);
 
     res.status(201).send();

@@ -8,7 +8,7 @@ const processRequestParams = (schema) => {
     if (error) {
       const errorMessages = error.details.map(detail => detail.message);
 
-      return res.status(422).send(errorMessages);
+      return res.status(400).send(errorMessages);
     }
 
     next();
